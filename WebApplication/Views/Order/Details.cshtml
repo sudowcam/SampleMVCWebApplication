@@ -1,0 +1,398 @@
+﻿@model Internal.Models.OrderModel
+@{
+    if (Request["Mode"] == "Edit")
+    {
+        ViewBag.Title = "New Order";
+    }
+    if (Request["Mode"] == "View")
+    {
+        ViewBag.Title = "Order";
+    }
+}
+@using (Html.BeginForm("Details", "Order", new { Mode = Request["Mode"], OrderID = Request["OrderID"] }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @*@Html.Partial("Alert")*@
+                        <h3 class="Title">@ViewBag.Title</h3>
+                        <hr />
+                        @if (Request["Mode"] == "Edit")
+                        {
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <br />
+                                    <h4>Order Details</h4>
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label Field">Order Date</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(x => x.OrderDate, "{0:yyyy-MM-dd}", new { @class = "form-control datepicker", @type = "date" })
+                                                @Html.ValidationMessageFor(x => x.OrderDate, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label Field">Ordered by</label>
+                                            <div class="col-sm-8">
+                                                @Html.DropDownListFor(x => x.EmployeeName, (IEnumerable<SelectListItem>)ViewBag.DropDownList_EmployeeName, " ", new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(x => x.EmployeeName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <h4>Purchase Details</h4>
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label Field">Product Category</label>
+                                            <div class="col-sm-8">
+                                                @Html.DropDownListFor(x => x.ProductCategory, (IEnumerable<SelectListItem>)ViewBag.DropDownList_ProductCategory, "-- Select Product Category --", new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(x => x.ProductCategory, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label Field">Product Name</label>
+                                            <div class="col-sm-8">
+                                                @Html.DropDownListFor(x => x.ProductName, Enumerable.Empty<SelectListItem>(), "-- Select Product Name --", new { @class = "form-control", @disabled = "disabled" })
+                                                @Html.ValidationMessageFor(x => x.ProductName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label Field">Ordered Quantity</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(x => x.OrderedQuantity, new { @class = "form-control", @type = "number", @min = 1, @step = 1, @Value = 1 })
+                                                @Html.ValidationMessageFor(x => x.OrderedQuantity, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label Field">Total Cost</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(x => x.TotalCost, new { @class = "form-control", @readonly = "true" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <h4>Delivery Details</h4>
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label Field">Shipper</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(x => x.ShipperName, new { @class = "form-control", @readonly = "true" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <br />
+                                    <h4>Customer Details</h4>
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label Field">Customer Name</label>
+                                            <div class="col-sm-8">
+                                                @Html.DropDownListFor(x => x.CustomerName, (IEnumerable<SelectListItem>)ViewBag.DropDownList_CustomerName, "-- Select Customer Name --", new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(x => x.CustomerName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label Field">Delivery Address</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextAreaFor(x => x.Address, new { @class = "form-control", @readonly = "true", @row = 3, @style = "resize: none" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-sm-9">
+                                        <div class="text-center d-flex align-items-end justify-content-end">
+                                            <button class="btn btn-primary" type="submit" id="ButtonSubmit" tabindex="4"><span class="glyphicon glyphicon-save"></span>&nbsp;&nbsp;Save&nbsp;&nbsp;</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        @if (Request["Mode"] == "View")
+                        {
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <br />
+                                    <h4>Order Details</h4>
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label Field">Order ID</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(x => x.OrderID, new { @class = "form-control", @readonly = "true" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label Field">Order Date</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(x => x.OrderDate, "{0:yyyy-MM-dd}", new { @class = "form-control", @readonly = "true", @type = "date" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label Field">Ordered by</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(x => x.EmployeeName, new { @class = "form-control", @readonly = "true" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <h4>Purchase Details</h4>
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label Field">Product Name</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(x => x.ProductName, new { @class = "form-control", @readonly = "true" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label Field">Product Category</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(x => x.ProductCategory, new { @class = "form-control", @readonly = "true" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label Field">Ordered Quantity</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(x => x.OrderedQuantity, new { @class = "form-control", @readonly = "true" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label Field">Total Cost</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(x => x.TotalCost, new { @class = "form-control", @readonly = "true" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <h4>Delivery Details</h4>
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label Field">Shipper</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(x => x.ShipperName, new { @class = "form-control", @readonly = "true" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <br />
+                                    <h4>Customer Details</h4>
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label Field">Customer Name</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(x => x.CustomerName, new { @class = "form-control", @readonly = "true" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label Field">Delivery Address</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextAreaFor(x => x.Address, new { @class = "form-control", @readonly = "true", @row = 3, @style = "resize: none" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+<script type="text/jscript">
+
+    //
+    // Default setup
+    //
+    $(document).ready(function () {
+
+        // #ProductName disabled by default
+        $("#ProductName").prop("disabled", true);
+    });
+
+
+    //
+    // Button Submit click event handler
+    //
+    $(document).ready(function () {
+
+        $('#ButtonSubmit').click(function () {
+
+            var oEmployeeName = $('#EmployeeName :selected').val();
+            if (!$.isNumeric(oEmployeeName)) {
+                alert("Ordered by cannot be left empty!");
+                event.preventDefault();
+            }
+
+            var oProductCategory = $('#ProductCategory :selected').val();
+            if (!$.isNumeric(oProductCategory)) {
+                alert("Product Category cannot be left empty!");
+                event.preventDefault();
+            }
+
+            var oProductName = $('#ProductName :selected').val();
+            if (!$.isNumeric(oProductName)) {
+                alert("Product Name cannot be left empty!");
+                event.preventDefault();
+            }
+
+            var oCustomerName = $('#CustomerName :selected').val();
+            if (!$.isNumeric(oCustomerName)) {
+                alert("Customer Name cannot be left empty!");
+                event.preventDefault();
+            }
+
+            var oOrderedQuantity = $('#OrderedQuantity').val();
+            if (oOrderedQuantity == 0) {
+                alert("Ordered Quantity cannot be equals to 0!");
+                event.preventDefault();
+            }
+
+        });
+    });
+
+
+    //
+    // Compute total cost
+    //
+    $(document).ready(function () {
+        $('#ProductName').change(function () { getTotalCost() });
+        $('#OrderedQuantity').change(function () { getTotalCost() });
+        $('#OrderedQuantity').keyup(function () { getTotalCost() });
+        $('#OrderedQuantity').focusout(function () { FocusoutEventHandler() });
+    });
+
+    function getTotalCost() {
+        var oProductId = $('#ProductName :selected').val();
+        var oOrderedQuantity = $('#OrderedQuantity').val();
+        console.log("oOrderedQuantity: " + oOrderedQuantity);
+
+        if ($.isNumeric(oProductId) && $.isNumeric(oOrderedQuantity)) {
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetTotalCost", "Order")',
+                data: { ProductID: oProductId, OrderQuantity: oOrderedQuantity },
+                contentType: "text/html; charset=utf-8",
+                dataType: "html",
+                success: function (data) {
+                    $('#TotalCost').val(formatCurrency(data));
+                },
+                error: function (xhr, status, thrownError) {
+                    alert(xhr.status);
+                    alert(thrownError);
+                }
+            });
+        }
+        else {
+            $('#TotalCost').val(formatCurrency(0.00));
+        }
+    }
+
+    function formatCurrency(number) {
+        if (number == "") return;
+        number = parseFloat(number).toFixed(2);
+        var n = number.split('').reverse().join("");
+        //console.log(n);
+        var n2 = n.replace(/\d\d\d(?!$)/g, "$&,");
+        return '$' + n2.split('').reverse().join('');
+    }
+
+    function FocusoutEventHandler() {
+        var value = $('#OrderedQuantity').val();
+        if (!$.isNumeric(value) || value < 1) {
+            $('#OrderedQuantity').val(1);
+            getTotalCost();
+        }
+    }
+
+
+    //
+    // Get filtered Product list based on ProductCategory
+    //
+    $(document).ready(function () {
+        $('#ProductCategory').change(function () {
+            var CategoryIdSelected = $('#ProductCategory :selected').val();
+            if ($.isNumeric(CategoryIdSelected)) {
+                $('#ProductName').prop('disabled', false);
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetFilteredListProductName", "Order")',
+                    data: { CategoryID: CategoryIdSelected },
+                    dataType: 'json',
+                    success: function (json) {
+                        $('#ProductName').empty();
+                        $('#ProductName').append('<option value="">-- Select Product Name --</option>');
+                        for (var i in json) {
+                            //alert(JSON.stringify(json[i]));
+                            $('#ProductName').append('<option value="' + json[i].Value + '">' + json[i].Text + '</option>');
+                        }
+                    },
+                    error: function (xhr, status, thrownError) {
+                        alert(xhr.status);
+                        alert(thrownError);
+                    }
+                });
+            }
+            else {
+                // Reset
+                $('#ProductName>option:eq()').prop('selected', true);
+                $('#ProductName').prop('disabled', true);
+            }
+
+            $('#TotalCost').val(0.00);
+            $('#ShipperName').val("");
+        });
+    });
+
+
+    //
+    // Get Shipper name based on Product ID
+    //
+    $(document).ready(function () {
+        $("#ProductName").change(function () {
+            var ProductIdSelected = $('#ProductName :selected').val();
+            if ($.isNumeric(ProductIdSelected)) {
+                $.get('@Url.Action("GetShipperName", "Order")', { ProductID: ProductIdSelected }, function (data) {
+                    $("#ShipperName").val(data);
+                });
+            }
+            else {
+                $('#ShipperName').val("");
+            }
+        });
+    });
+
+
+    //
+    // Get Customer address based on Customer name
+    //
+    $(document).ready(function () {
+        $('#CustomerName').change(function () {
+            var CustomerIdSelected = $('#CustomerName :selected').val();
+            if ($.isNumeric(CustomerIdSelected)) {
+                $.get('@Url.Action("GetCustomerAddress", "Order")', { CustomerID: CustomerIdSelected }, function (data) {
+                    $('#Address').val(data);
+                });
+            }
+            else {
+                $('#Address').val("");
+            }
+        });
+    });
+
+
+</script>
+}

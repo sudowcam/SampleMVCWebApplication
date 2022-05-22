@@ -1,0 +1,68 @@
+﻿@model PagedList.IPagedList<Internal.Database.OrderDetails>
+@using PagedList.Mvc;
+<link href="/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "Order List";
+}
+@using (Html.BeginForm("Index", "Order", FormMethod.Get))
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h3 class="Title">@ViewBag.Title</h3>
+                        <hr />
+                        <div class="text-center">
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    @Html.TextBox("Search", "", new { @class = "form-control" })
+                                </div>
+                                <button class="btn btn-primary" type="submit">
+                                    <span class="glyphicon glyphicon-search"></span>&nbsp;&nbsp;Search
+                                </button>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="table-responsive">
+                            <table class="table TableList table-hover">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Order Date</th>
+                                        <th>Customer Name</th>
+                                        <th>Product Category</th>
+                                        <th>Payment</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var m in Model)
+                                    {
+                                        <tr>
+                                            <td><a class="btn btn-primary" href="@Url.Action("Details", new { Mode = "View", OrderID = m.OrderID })"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;View</a></td>
+                                            <td>@m.Orders.OrderDate.ToString("yyyy-MM-dd")</td>
+                                            <td>@m.Orders.Customers.CustomerName</td>
+                                            <td>@m.Products.Categories.CategoryName</td>
+                                            @{
+                                                var TotalCost = m.Quantity * m.Products.Price;
+                                            }
+                                            <td>@TotalCost.ToString("n2")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-center">
+                            @Html.PagedListPager(Model, Page => Url.Action("Index", new
+                            {
+                                Page,
+                                Search = Request.QueryString["Search"],
+                                Sort = Request.QueryString["Sort"]
+                            }))
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

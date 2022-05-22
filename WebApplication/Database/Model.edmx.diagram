@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="3f1fa7312d3c419098258e0e1334fd78" Name="Diagram1">
+        <EntityTypeShape EntityType="Internal.Categories" Width="1.5" PointX="0.75" PointY="11.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Internal.Customers" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="Internal.Employees" Width="1.5" PointX="0.75" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Internal.OrderDetails" Width="1.5" PointX="5.25" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Internal.Orders" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="Internal.Products" Width="1.5" PointX="3" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Internal.Shippers" Width="1.5" PointX="0.75" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Internal.Suppliers" Width="1.5" PointX="0.75" PointY="14.375" IsExpanded="true" />
+        <AssociationConnector Association="Internal.FK_Products_Categories" ManuallyRouted="false" />
+        <AssociationConnector Association="Internal.FK_Orders_Customers" ManuallyRouted="false" />
+        <AssociationConnector Association="Internal.FK_Orders_Employees" ManuallyRouted="false" />
+        <AssociationConnector Association="Internal.FK_OrderDetails_Orders" ManuallyRouted="false" />
+        <AssociationConnector Association="Internal.FK_OrderDetails_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="Internal.FK_Orders_Shippers" ManuallyRouted="false" />
+        <AssociationConnector Association="Internal.FK_Products_Suppliers" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
